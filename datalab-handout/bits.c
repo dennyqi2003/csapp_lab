@@ -1,7 +1,7 @@
 /* 
  * CS:APP Data Lab 
  * 
- * <Please put your name and userid here>
+ * DennyQi 20251207
  * 
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -143,7 +143,7 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+  return ~((~((~x) & y)) & (~(x & (~y))));
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -152,9 +152,7 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int tmin(void) {
-
-  return 2;
-
+  return (1<<31);
 }
 //2
 /*
@@ -165,7 +163,9 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  return 2;
+  // return (!((~x)<<1)) & (((~x) & (1<<31))>>31);
+  return (!(~(x+1+x))) & !!(x+1);
+  // x+x+1 is wrong, must use x+1+x. Compiler automatically translates x+x+1 into return 0.
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -176,7 +176,8 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  return 2;
+  int a = 0xAA + (0xAA<<8) + (0xAA<<16) + (0xAA<<24);
+  return !((x&a)^a);
 }
 /* 
  * negate - return -x 
@@ -186,7 +187,7 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return (~x+1);
 }
 //3
 /* 
@@ -199,7 +200,11 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  return 2;
+  int z = x & 0x0f;
+  int cond2 = !!(z & (0x08));
+  int cond3 = (z ^ (0x08));
+  int cond4 = (z ^ (0x09));
+  return (!((x>>4)^0x03)) & (!cond2 | (cond2 & !(cond3 & cond4)));
 }
 /* 
  * conditional - same as x ? y : z 
